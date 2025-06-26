@@ -11,65 +11,83 @@ export default function Login() {
   const { redirectTo } = qs.parse(search, { ignoreQueryPrefix: true });
   const navigate = useNavigate();
   const { setTokens } = useAuthStore();
+
   const {
     register,
     handleSubmit,
-    reset,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm({
     resolver: yupResolver(logInAndRegisterSchema),
   });
+
   const onSubmit = async (data) => {
     try {
-      const res = await logInAPI({
-        email: data.email,
-        password: data.password,
-      }); // Match API payload
-      setTokens(res.data); // Adjust based on API response structure
+      const res = await logInAPI(data);
+      setTokens(res.data);
       navigate(redirectTo ?? "/");
     } catch (e) {
-      console.error("Login error:", e.response?.data || e.message);
-    } finally {
-      // reset();
+      console.error(e);
     }
   };
+
   return (
-    <div className="text-center">
-      <h2>Login Page</h2>
-      <div className="mt-4">
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="p-4 bg-light border rounded w-50 mx-auto"
-        >
-          <div className="mb-3 text-start">
-            <label htmlFor="email" className="form-label">
-              Email:
+    <div className="profile-container">
+      <div className="profile-card auth-card">
+        <h2 className="profile-section-title">Welcome Back</h2>
+        <p className="auth-subtitle">Please enter your credentials to login</p>
+
+        <form onSubmit={handleSubmit(onSubmit)} className="auth-form">
+          <div className="form-group">
+            <label htmlFor="email" className="info-label">
+              Email
             </label>
             <input
               id="email"
               type="email"
-              className="form-control"
-              {...register("email", {})}
+              className={`profile-input ${errors.email ? "is-invalid" : ""}`}
+              {...register("email")}
+              placeholder="Enter your email"
             />
-            <p className="text-danger small">{errors?.email?.message}</p>
+            {errors.email && (
+              <div className="form-error">{errors.email.message}</div>
+            )}
           </div>
-          <div className="mb-3 text-start">
-            <label htmlFor="password" className="form-label">
-              Password:
+
+          <div className="form-group">
+            <label htmlFor="password" className="info-label">
+              Password
             </label>
             <input
+              id="password"
               type="password"
-              className="form-control"
-              {...register("password", {})}
+              className={`profile-input ${errors.password ? "is-invalid" : ""}`}
+              {...register("password")}
+              placeholder="Enter your password"
             />
-            <p className="text-danger small">{errors?.password?.message}</p>
+            {errors.password && (
+              <div className="form-error">{errors.password.message}</div>
+            )}
           </div>
-          <div className="text-center">
-            <input
+
+          <div className="form-group">
+            <button
               type="submit"
-              value="Log In"
-              className="btn btn-custom w-100"
-            />
+              className="btn btn-primary w-100"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? (
+                <>
+                  <span
+                    className="spinner-border spinner-border-sm me-2"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>
+                  Logging in...
+                </>
+              ) : (
+                "Log In"
+              )}
+            </button>
           </div>
         </form>
       </div>

@@ -13,26 +13,27 @@ export const getMe = async () => {
   }
 };
 
-export const getUserPosts = async () => {
+export const editeMe = async (updatedData) => {
   try {
     const { token } =
       JSON.parse(localStorage.getItem("auth-store"))?.state ?? {};
-    if (!token) throw new Error("no token found");
+    if (!token) throw new Error("No token found");
     const { id } = jwtDecode(token);
-    return await APIClient.get(`/users/${id}/posts`);
+    return await APIClient.put(`/users/${id}`, updatedData);
   } catch (error) {
-    throw new Error(error);
+    throw new Error(error.message);
   }
 };
-
-export const createPost = async (postData) => {
+export const deleteMe = async () => {
+  const authState = JSON.parse(localStorage.getItem("auth-store"));
+  const userId = authState?.state?.user?.id;
+  return await APIClient.delete(`/users/${userId}`);
+};
+export const getUserById = async (id) => {
   try {
-    const { token } =
-      JSON.parse(localStorage.getItem("auth-store"))?.state ?? {};
-    if (!token) throw new Error("no token found");
-    const { id } = jwtDecode(token);
-    return await APIClient.post("/posts", { ...postData, authorId: id });
+    return await APIClient.get(`/users/${id}`);
   } catch (error) {
-    throw new Error(error);
+    console.error("Error fetching user:", error);
+    return { data: { name: "Unknown" } };
   }
 };

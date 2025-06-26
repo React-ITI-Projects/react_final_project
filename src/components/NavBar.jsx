@@ -4,12 +4,10 @@ import { Link, useNavigate } from "react-router-dom";
 export default function Navbar() {
   const { token, clear } = useAuthStore();
   const navigate = useNavigate();
-  const userId = useAuthStore((state) => state.userId); // Assuming userId is stored
-
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+    <nav className="navbar navbar-expand-lg navbar-light bg-light">
       <div className="container">
-        <Link className="navbar-brand text-primary fw-bold" to="/">
+        <Link className="navbar-brand" to="/">
           MyBlog
         </Link>
         <button
@@ -28,11 +26,6 @@ export default function Navbar() {
               </Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to={`/users/${userId}/posts`}>
-                My Posts
-              </Link>
-            </li>
-            <li className="nav-item">
               <Link className="nav-link" to="/profile">
                 Profile
               </Link>
@@ -42,30 +35,24 @@ export default function Navbar() {
             {token ? (
               <li className="nav-item">
                 <button
-                  className="nav-link btn btn-danger"
+                  className="nav-link"
                   onClick={() => {
                     clear();
                     navigate("/login");
                   }}
                 >
-                  Log Out
+                  log out
                 </button>
               </li>
             ) : (
               <>
                 <li className="nav-item">
-                  <Link
-                    className="nav-link btn btn-outline-primary"
-                    to="/login"
-                  >
+                  <Link className="nav-link" to="/login">
                     Login
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link
-                    className="nav-link btn btn-outline-primary"
-                    to="/register"
-                  >
+                  <Link className="nav-link" to="/register">
                     Register
                   </Link>
                 </li>

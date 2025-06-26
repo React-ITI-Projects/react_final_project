@@ -10,60 +10,177 @@ export default function Register() {
     register,
     handleSubmit,
     reset,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm({
     resolver: yupResolver(logInAndRegisterSchema),
   });
+
   const onSubmit = async (data) => {
     try {
-      await registerAPI({ email: data.email, password: data.password }); // Adjust fields as needed
+      await registerAPI(data);
       navigate("/login");
     } catch (e) {
-      console.error("Registration error:", e.response?.data || e.message);
-      if (e.response?.status === 409) {
-        alert("Email already in use. Please use a different email.");
-      }
+      console.error(e);
     } finally {
       reset();
     }
   };
+
   return (
-    <div className="text-center">
-      <h2>Register Page</h2>
-      <div className="mt-4">
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="p-4 bg-light border rounded w-50 mx-auto"
-        >
-          <div className="mb-3 text-start">
-            <label htmlFor="email" className="form-label">
-              Email:
-            </label>
-            <input
-              id="email"
-              type="email"
-              className="form-control"
-              {...register("email", {})}
-            />
-            <p className="text-danger small">{errors?.email?.message}</p>
+    <div className="profile-container">
+      <div className="profile-card auth-card">
+        <h2 className="profile-section-title">Create Your Account</h2>
+        <p className="auth-subtitle">Join our community today</p>
+
+        <form onSubmit={handleSubmit(onSubmit)} className="auth-form">
+          <div className="row g-3">
+            <div className="col-md-6">
+              <div className="form-group">
+                <label htmlFor="name" className="info-label">
+                  Full Name
+                </label>
+                <input
+                  id="name"
+                  type="text"
+                  className={`profile-input ${errors.name ? "is-invalid" : ""}`}
+                  {...register("name")}
+                  placeholder="Your full name"
+                />
+                {errors.name && (
+                  <div className="form-error">{errors.name.message}</div>
+                )}
+              </div>
+            </div>
+
+            <div className="col-md-6">
+              <div className="form-group">
+                <label htmlFor="username" className="info-label">
+                  Username
+                </label>
+                <input
+                  id="username"
+                  type="text"
+                  className={`profile-input ${
+                    errors.username ? "is-invalid" : ""
+                  }`}
+                  {...register("username")}
+                  placeholder="Choose a username"
+                />
+                {errors.username && (
+                  <div className="form-error">{errors.username.message}</div>
+                )}
+              </div>
+            </div>
+
+            <div className="col-md-6">
+              <div className="form-group">
+                <label htmlFor="email" className="info-label">
+                  Email
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  className={`profile-input ${
+                    errors.email ? "is-invalid" : ""
+                  }`}
+                  {...register("email")}
+                  placeholder="Your email address"
+                />
+                {errors.email && (
+                  <div className="form-error">{errors.email.message}</div>
+                )}
+              </div>
+            </div>
+
+            <div className="col-md-6">
+              <div className="form-group">
+                <label htmlFor="phone" className="info-label">
+                  Phone
+                </label>
+                <input
+                  id="phone"
+                  type="text"
+                  className={`profile-input ${
+                    errors.phone ? "is-invalid" : ""
+                  }`}
+                  {...register("phone")}
+                  placeholder="Your phone number"
+                />
+                {errors.phone && (
+                  <div className="form-error">{errors.phone.message}</div>
+                )}
+              </div>
+            </div>
+
+            <div className="col-md-6">
+              <div className="form-group">
+                <label htmlFor="password" className="info-label">
+                  Password
+                </label>
+                <input
+                  id="password"
+                  type="password"
+                  className={`profile-input ${
+                    errors.password ? "is-invalid" : ""
+                  }`}
+                  {...register("password")}
+                  placeholder="Create a password"
+                />
+                {errors.password && (
+                  <div className="form-error">{errors.password.message}</div>
+                )}
+              </div>
+            </div>
+
+            <div className="col-md-6">
+              <div className="form-group">
+                <label htmlFor="avatar" className="info-label">
+                  Avatar URL
+                </label>
+                <input
+                  id="avatar"
+                  type="text"
+                  className={`profile-input ${
+                    errors.avatar ? "is-invalid" : ""
+                  }`}
+                  {...register("avatar")}
+                  placeholder="Optional profile image URL"
+                />
+                {errors.avatar && (
+                  <div className="form-error">{errors.avatar.message}</div>
+                )}
+              </div>
+            </div>
           </div>
-          <div className="mb-3 text-start">
-            <label htmlFor="password" className="form-label">
-              Password:
-            </label>
-            <input
-              type="password"
-              className="form-control"
-              {...register("password", {})}
-            />
-            <p className="text-danger small">{errors?.password?.message}</p>
-          </div>
-          <div className="text-center">
-            <input
+
+          <div className="form-group mt-4">
+            <button
               type="submit"
-              value="Create My User"
-              className="btn btn-custom w-100"
-            />
+              className="btn btn-primary w-100"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? (
+                <>
+                  <span
+                    className="spinner-border spinner-border-sm me-2"
+                    role="status"
+                    aria-hidden="true"
+                  ></span>
+                  Creating Account...
+                </>
+              ) : (
+                "Register Now"
+              )}
+            </button>
+          </div>
+
+          <div className="text-center mt-3">
+            <p className="auth-footer-text">
+              Already have an account?{" "}
+              <a href="/login" className="auth-link">
+                Sign in here
+              </a>
+            </p>
           </div>
         </form>
       </div>
