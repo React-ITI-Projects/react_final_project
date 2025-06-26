@@ -4,6 +4,8 @@ import { Link, useNavigate } from "react-router-dom";
 export default function Navbar() {
   const { token, clear } = useAuthStore();
   const navigate = useNavigate();
+  const userId = useAuthStore((state) => state.userId); // Assuming userId is stored
+
   return (
     <nav className="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
       <div className="container">
@@ -23,6 +25,11 @@ export default function Navbar() {
             <li className="nav-item">
               <Link className="nav-link" to="/posts">
                 Posts
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link className="nav-link" to={`/users/${userId}/posts`}>
+                My Posts
               </Link>
             </li>
             <li className="nav-item">
