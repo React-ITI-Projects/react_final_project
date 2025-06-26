@@ -5,9 +5,9 @@ export default function Navbar() {
   const { token, clear } = useAuthStore();
   const navigate = useNavigate();
   return (
-    <nav className="navbar navbar-expand-lg navbar-light bg-light">
+    <nav className="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
       <div className="container">
-        <Link className="navbar-brand" to="/">
+        <Link className="navbar-brand text-primary fw-bold" to="/">
           MyBlog
         </Link>
         <button
@@ -35,24 +35,30 @@ export default function Navbar() {
             {token ? (
               <li className="nav-item">
                 <button
-                  className="nav-link"
+                  className="nav-link btn btn-danger"
                   onClick={() => {
                     clear();
                     navigate("/login");
                   }}
                 >
-                  log out
+                  Log Out
                 </button>
               </li>
             ) : (
               <>
                 <li className="nav-item">
-                  <Link className="nav-link" to="/login">
+                  <Link
+                    className="nav-link btn btn-outline-primary"
+                    to="/login"
+                  >
                     Login
                   </Link>
                 </li>
                 <li className="nav-item">
-                  <Link className="nav-link" to="/register">
+                  <Link
+                    className="nav-link btn btn-outline-primary"
+                    to="/register"
+                  >
                     Register
                   </Link>
                 </li>

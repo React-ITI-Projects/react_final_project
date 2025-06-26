@@ -1,7 +1,8 @@
 import { APIClient } from ".";
+import axios from "axios";
 
 export const registerAPI = async (data) => {
-  return await APIClient.post("/signup", { ...data });
+  return await axios.post("/signup", { ...data });
 };
 
 export const logInAPI = async (data) => {

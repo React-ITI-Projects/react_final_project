@@ -17,32 +17,51 @@ export default function Register() {
   const onSubmit = async (data) => {
     try {
       await registerAPI(data);
-
       navigate("/login");
     } catch (e) {
-      console.error(e);
+      console.error("Registration error:", e.response?.data || e.message);
     } finally {
       reset();
     }
   };
   return (
     <div className="text-center">
-      <h2>Register Page (Form goes here)</h2>
-      <div>
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="">
-            <label htmlFor="email">Email :</label>{" "}
-            <input id="email" type="email" {...register("email", {})} />
-            <p style={{ color: "orange" }}>{errors?.email?.message}</p>
+      <h2>Register Page</h2>
+      <div className="mt-4">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="p-4 bg-light border rounded w-50 mx-auto"
+        >
+          <div className="mb-3 text-start">
+            <label htmlFor="email" className="form-label">
+              Email:
+            </label>
+            <input
+              id="email"
+              type="email"
+              className="form-control"
+              {...register("email", {})}
+            />
+            <p className="text-danger small">{errors?.email?.message}</p>
           </div>
 
-          <div className="">
-            <label htmlFor="password">Password :</label>{" "}
-            <input type="password" {...register("password", {})} />
-            <p style={{ color: "orange" }}>{errors?.password?.message}</p>
+          <div className="mb-3 text-start">
+            <label htmlFor="password" className="form-label">
+              Password:
+            </label>
+            <input
+              type="password"
+              className="form-control"
+              {...register("password", {})}
+            />
+            <p className="text-danger small">{errors?.password?.message}</p>
           </div>
-          <div className="">
-            <input type="submit" value="create my user" />
+          <div className="text-center">
+            <input
+              type="submit"
+              value="Create My User"
+              className="btn btn-custom w-100"
+            />
           </div>
         </form>
       </div>
