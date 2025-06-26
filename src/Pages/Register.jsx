@@ -16,10 +16,13 @@ export default function Register() {
   });
   const onSubmit = async (data) => {
     try {
-      await registerAPI(data);
+      await registerAPI({ email: data.email, password: data.password }); // Adjust fields as needed
       navigate("/login");
     } catch (e) {
       console.error("Registration error:", e.response?.data || e.message);
+      if (e.response?.status === 409) {
+        alert("Email already in use. Please use a different email.");
+      }
     } finally {
       reset();
     }
@@ -44,7 +47,6 @@ export default function Register() {
             />
             <p className="text-danger small">{errors?.email?.message}</p>
           </div>
-
           <div className="mb-3 text-start">
             <label htmlFor="password" className="form-label">
               Password:

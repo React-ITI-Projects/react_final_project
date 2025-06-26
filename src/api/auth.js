@@ -2,11 +2,11 @@ import { APIClient } from ".";
 import axios from "axios";
 
 export const registerAPI = async (data) => {
-  return await axios.post("/signup", { ...data });
+  return axios.post("http://localhost:3000/signup", data);
 };
 
 export const logInAPI = async (data) => {
-  return await APIClient.post("/login", { ...data });
+  return axios.post("http://localhost:3000/login", data);
 };
 
 export const refreshTokeAPI = async (data) => {

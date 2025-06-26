@@ -4,7 +4,7 @@ import { useAuthStore } from "@/store/auth";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useForm } from "react-hook-form";
 import qs from "qs";
-import { useLocation, useNavigate } from "react-router-dom"; // Added useLocation here
+import { useLocation, useNavigate } from "react-router-dom";
 
 export default function Login() {
   const { search } = useLocation();
@@ -21,11 +21,14 @@ export default function Login() {
   });
   const onSubmit = async (data) => {
     try {
-      const res = await logInAPI(data);
-      setTokens(res.data);
+      const res = await logInAPI({
+        email: data.email,
+        password: data.password,
+      }); // Match API payload
+      setTokens(res.data); // Adjust based on API response structure
       navigate(redirectTo ?? "/");
     } catch (e) {
-      console.error(e);
+      console.error("Login error:", e.response?.data || e.message);
     } finally {
       // reset();
     }
@@ -50,7 +53,6 @@ export default function Login() {
             />
             <p className="text-danger small">{errors?.email?.message}</p>
           </div>
-
           <div className="mb-3 text-start">
             <label htmlFor="password" className="form-label">
               Password:
